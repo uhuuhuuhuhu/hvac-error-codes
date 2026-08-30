@@ -1,0 +1,5 @@
+[
+  { "brand": "daikin", "code": "u4", "title": "Communication Error", "cause": "Malfunction of transmission between indoor and outdoor unit", "solution": "Check transmission wiring and thermistor." },
+  { "brand": "carrier", "code": "e1", "title": "Room Temperature Sensor Fault", "cause": "Open or short circuit in room temperature sensor", "solution": "Replace the room temperature sensor." },
+  { "brand": "mitsubishi", "code": "p8", "title": "Pipe Temperature Protection", "cause": "Refrigerant shortage or closed valve", "solution": "Check refrigerant leaks and ensure valves are open." }
+]
