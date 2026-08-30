@@ -14,8 +14,8 @@ export default function Home() {
       item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 브랜드별로 그룹화
-  const groupedData = filteredData.reduce((acc, item) => {
+  // 1단계: 브랜드별로 그룹화
+  const groupedByBrand = filteredData.reduce((acc, item) => {
     if (!acc[item.brand]) {
       acc[item.brand] = [];
     }
@@ -23,8 +23,18 @@ export default function Home() {
     return acc;
   }, {});
 
-  // 대분류(브랜드) 이름을 알파벳 순서(A -> Z)로 정렬
-  const sortedBrands = Object.keys(groupedData).sort();
+  // 2단계: 알파벳 대분류(A-Z)별로 브랜드 묶기
+  const groupedByAlphabet = Object.keys(groupedByBrand).reduce((acc, brand) => {
+    const firstLetter = brand.charAt(0).toUpperCase();
+    if (!acc[firstLetter]) {
+      acc[firstLetter] = [];
+    }
+    acc[firstLetter].push(brand);
+    return acc;
+  }, {});
+
+  // 알파벳 순서 정렬 (A -> Z)
+  const sortedAlphabets = Object.keys(groupedByAlphabet).sort();
 
   return (
     <main style={{ padding: '40px', fontFamily: 'sans-serif', maxWidth: '900px', margin: '0 auto', backgroundColor: '#fcfcfc', minHeight: '100vh' }}>
@@ -53,36 +63,68 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 알파벳 순서대로 정렬된 브랜드 섹션 출력 */}
-      {sortedBrands.length === 0 ? (
+      {/* 알파벳 대분류별 섹션 출력 */}
+      {sortedAlphabets.length === 0 ? (
         <p style={{ textAlign: 'center', color: '#888', marginTop: '40px' }}>No error codes found matching your search.</p>
       ) : (
-        sortedBrands.map((brand) => (
-          <section key={brand} style={{ marginBottom: '40px', backgroundColor: '#fff', padding: '25px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-            <h2 style={{ textTransform: 'uppercase', borderBottom: '2px solid #eaeaea', paddingBottom: '10px', color: '#0070f3', marginBottom: '15px', fontSize: '20px' }}>
-              {brand} <span style={{ fontSize: '14px', color: '#888', fontWeight: 'normal' }}>({groupedData[brand].length} codes)</span>
-            </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '15px' }}>
-              {groupedData[brand].map((item) => (
-                <Link
-                  key={item.code}
-                  href={`/error?brand=${item.brand}&code=${item.code}`}
-                  style={{
-                    display: 'block',
-                    padding: '12px 15px',
-                    borderRadius: '8px',
-                    border: '1px solid #eee',
-                    backgroundColor: '#fafafa',
-                    textDecoration: 'none',
-                    color: '#333',
-                  }}
-                >
-                  <div style={{ fontWeight: 'bold', color: '#d32f2f', marginBottom: '4px' }}>Code: {item.code.toUpperCase()}</div>
-                  <div style={{ fontSize: '14px', color: '#444', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title}</div>
-                </Link>
-              ))}
+        sortedAlphabets.map((letter) => (
+          <div key={letter} style={{ marginBottom: '35px' }}>
+            {/* 알파벳 대분류 타이틀 */}
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
+              <span style={{ 
+                backgroundColor: '#0070f3', 
+                color: '#fff', 
+                fontSize: '18px', 
+                fontWeight: 'bold', 
+                width: '36px', 
+                height: '36px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                borderRadius: '8px',
+                marginRight: '10px',
+                boxShadow: '0 2px 4px rgba(0,112,243,0.3)'
+              }}>
+                {letter}
+              </span>
+              <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>Index {letter}</span>
             </div>
-          </section>
+
+            {/* 해당 알파벳에 속한 업체명(브랜드) 목록 */}
+            {groupedByAlphabet[letter].sort().map((brand) => (
+              <section key={brand} style={{ marginBottom: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '10px', border: '1px solid #eaeaea', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                <h3 style={{ textTransform: 'uppercase', color: '#222', marginBottom: '12px', fontSize: '17px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span>{brand}</span>
+                  <span style={{ fontSize: '13px', color: '#666', fontWeight: 'normal', backgroundColor: '#f0f0f0', padding: '2px 8px', borderRadius: '4px' }}>
+                    {groupedByBrand[brand].length} codes
+                  </span>
+                </h3>
+                
+                {/* 하위 에러코드 리스트 */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '10px' }}>
+                  {groupedByBrand[brand].map((item) => (
+                    <Link
+                      key={item.code}
+                      href={`/error?brand=${item.brand}&code=${item.code}`}
+                      style={{
+                        display: 'block',
+                        padding: '10px 12px',
+                        borderRadius: '6px',
+                        border: '1px solid #f0f0f0',
+                        backgroundColor: '#fafafa',
+                        textDecoration: 'none',
+                        color: '#333',
+                        transition: 'background-color 0.2s'
+                      }}
+                    >
+                      <div style={{ fontWeight: 'bold', color: '#d32f2f', fontSize: '13px', marginBottom: '2px' }}>Code: {item.code.toUpperCase()}</div>
+                      <div style={{ fontSize: '13px', color: '#555', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title}</div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         ))
       )}
     </main>
