@@ -14,7 +14,7 @@ export default function Home() {
       item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 1단계: 브랜드별로 그룹화
+  // 브랜드별 그룹화
   const groupedByBrand = filteredData.reduce((acc, item) => {
     if (!acc[item.brand]) {
       acc[item.brand] = [];
@@ -23,7 +23,7 @@ export default function Home() {
     return acc;
   }, {});
 
-  // 2단계: 알파벳 대분류(A-Z)별로 브랜드 묶기
+  // 알파벳 대분류(A-Z)별 그룹화
   const groupedByAlphabet = Object.keys(groupedByBrand).reduce((acc, brand) => {
     const firstLetter = brand.charAt(0).toUpperCase();
     if (!acc[firstLetter]) {
@@ -33,100 +33,140 @@ export default function Home() {
     return acc;
   }, {});
 
-  // 알파벳 순서 정렬 (A -> Z)
   const sortedAlphabets = Object.keys(groupedByAlphabet).sort();
 
   return (
-    <main style={{ padding: '40px', fontFamily: 'sans-serif', maxWidth: '900px', margin: '0 auto', backgroundColor: '#fcfcfc', minHeight: '100vh' }}>
-      <header style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '32px', color: '#1a1a1a', marginBottom: '10px' }}>Global HVAC Error Codes Directory</h1>
-        <p style={{ color: '#666', fontSize: '16px' }}>Find troubleshooting steps, causes, and solutions for commercial AC units instantly.</p>
-        
-        {/* 실시간 검색창 */}
-        <div style={{ marginTop: '25px' }}>
+    <div style={{ fontFamily: 'sans-serif', backgroundColor: '#f4f6f8', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      
+      {/* 상단 헤더 및 검색바 */}
+      <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #e1e4e8', padding: '20px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
+        <div>
+          <h1 style={{ fontSize: '22px', color: '#111', margin: 0 }}>HVAC Error Codes Directory</h1>
+          <p style={{ color: '#666', fontSize: '13px', margin: '4px 0 0 0' }}>Professional Troubleshooting Database</p>
+        </div>
+        <div style={{ flex: '1', maxWidth: '400px' }}>
           <input
             type="text"
-            placeholder="Search by Brand, Error Code, or Description (e.g., Daikin, U4)..."
+            placeholder="Search code, brand, or symptom..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
               width: '100%',
-              maxWidth: '500px',
-              padding: '12px 20px',
-              fontSize: '16px',
-              borderRadius: '30px',
-              border: '1px solid #ccc',
+              padding: '10px 16px',
+              fontSize: '14px',
+              borderRadius: '6px',
+              border: '1px solid #d1d5db',
               outline: 'none',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
+              backgroundColor: '#f9fafb'
             }}
           />
         </div>
       </header>
 
-      {/* 알파벳 대분류별 섹션 출력 */}
-      {sortedAlphabets.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#888', marginTop: '40px' }}>No error codes found matching your search.</p>
-      ) : (
-        sortedAlphabets.map((letter) => (
-          <div key={letter} style={{ marginBottom: '35px' }}>
-            {/* 알파벳 대분류 타이틀 */}
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-              <span style={{ 
-                backgroundColor: '#0070f3', 
-                color: '#fff', 
-                fontSize: '18px', 
-                fontWeight: 'bold', 
-                width: '36px', 
-                height: '36px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                borderRadius: '8px',
-                marginRight: '10px',
-                boxShadow: '0 2px 4px rgba(0,112,243,0.3)'
-              }}>
-                {letter}
-              </span>
-              <span style={{ fontSize: '20px', fontWeight: 'bold', color: '#333' }}>Index {letter}</span>
-            </div>
-
-            {/* 해당 알파벳에 속한 업체명(브랜드) 목록 */}
-            {groupedByAlphabet[letter].sort().map((brand) => (
-              <section key={brand} style={{ marginBottom: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '10px', border: '1px solid #eaeaea', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-                <h3 style={{ textTransform: 'uppercase', color: '#222', marginBottom: '12px', fontSize: '17px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span>{brand}</span>
-                  <span style={{ fontSize: '13px', color: '#666', fontWeight: 'normal', backgroundColor: '#f0f0f0', padding: '2px 8px', borderRadius: '4px' }}>
-                    {groupedByBrand[brand].length} codes
-                  </span>
-                </h3>
-                
-                {/* 하위 에러코드 리스트 */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '10px' }}>
-                  {groupedByBrand[brand].map((item) => (
-                    <Link
-                      key={item.code}
-                      href={`/error?brand=${item.brand}&code=${item.code}`}
-                      style={{
-                        display: 'block',
-                        padding: '10px 12px',
-                        borderRadius: '6px',
-                        border: '1px solid #f0f0f0',
-                        backgroundColor: '#fafafa',
-                        textDecoration: 'none',
-                        color: '#333',
-                        transition: 'background-color 0.2s'
-                      }}
-                    >
-                      <div style={{ fontWeight: 'bold', color: '#d32f2f', fontSize: '13px', marginBottom: '2px' }}>Code: {item.code.toUpperCase()}</div>
-                      <div style={{ fontSize: '13px', color: '#555', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title}</div>
-                    </Link>
-                  ))}
+      {/* 메인 컨테이너 (좌측 사이드바 + 우측 본문) */}
+      <div style={{ display: 'flex', flex: '1', maxWidth: '1200px', width: '100%', margin: '0 auto', padding: '30px 20px', gap: '30px', boxSizing: 'border-box' }}>
+        
+        {/* 좌측 사이드바 (블로그 스타일 카테고리) */}
+        <aside style={{ width: '260px', flexShrink: '0', display: window && window.innerWidth <= 768 ? 'none' : 'block' }}>
+          <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e1e4e8', padding: '20px', position: 'sticky', top: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+            <h3 style={{ fontSize: '15px', color: '#333', borderBottom: '2px solid #0070f3', paddingBottom: '8px', marginTop: 0, marginBottom: '15px', textTransform: 'uppercase' }}>
+              Categories (A-Z)
+            </h3>
+            
+            {sortedAlphabets.length === 0 ? (
+              <p style={{ fontSize: '13px', color: '#888' }}>No categories</p>
+            ) : (
+              sortedAlphabets.map((letter) => (
+                <div key={letter} style={{ marginBottom: '15px' }}>
+                  <div style={{ fontWeight: 'bold', color: '#0070f3', fontSize: '14px', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ backgroundColor: '#ebf5ff', padding: '2px 6px', borderRadius: '4px' }}>{letter}</span>
+                  </div>
+                  <ul style={{ listStyle: 'none', paddingLeft: '12px', margin: 0, borderLeft: '2px solid #f0f2f5' }}>
+                    {groupedByAlphabet[letter].sort().map((brand) => (
+                      <li key={brand} style={{ margin: '6px 0' }}>
+                        <a 
+                          href={`#brand-${brand}`} 
+                          style={{ fontSize: '13px', color: '#4b5563', textDecoration: 'none', display: 'block', padding: '2px 0' }}
+                          onMouseOver={(e) => e.target.style.color = '#0070f3'}
+                          onMouseOut={(e) => e.target.style.color = '#4b5563'}
+                        >
+                          {brand.toUpperCase()} <span style={{ color: '#9ca3af', fontSize: '11px' }}>({groupedByBrand[brand].length})</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </section>
-            ))}
+              ))
+            )}
           </div>
-        ))
-      )}
-    </main>
+        </aside>
+
+        {/* 우측 메인 컨텐츠 영역 */}
+        <main style={{ flex: '1', minWidth: 0 }}>
+          {sortedAlphabets.length === 0 ? (
+            <div style={{ backgroundColor: '#fff', padding: '40px', textAlign: 'center', borderRadius: '8px', border: '1px solid #e1e4e8' }}>
+              <p style={{ color: '#666', fontSize: '15px' }}>No error codes found matching your search.</p>
+            </div>
+          ) : (
+            sortedAlphabets.map((letter) => (
+              <div key={letter} style={{ marginBottom: '35px' }}>
+                <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#111', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #d1d5db', paddingBottom: '6px' }}>
+                  <span>Index [{letter}]</span>
+                </div>
+
+                {groupedByAlphabet[letter].sort().map((brand) => (
+                  <section 
+                    key={brand} 
+                    id={`brand-${brand}`}
+                    style={{ marginBottom: '25px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', border: '1px solid #e1e4e8', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}
+                  >
+                    <h3 style={{ textTransform: 'uppercase', color: '#1f2937', marginTop: 0, marginBottom: '15px', fontSize: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>{brand}</span>
+                      <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 'normal', backgroundColor: '#f3f4f6', padding: '2px 8px', borderRadius: '12px' }}>
+                        {groupedByBrand[brand].length} codes registered
+                      </span>
+                    </h3>
+                    
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '12px' }}>
+                      {groupedByBrand[brand].map((item) => (
+                        <Link
+                          key={item.code}
+                          href={`/error?brand=${item.brand}&code=${item.code}`}
+                          style={{
+                            display: 'block',
+                            padding: '12px',
+                            borderRadius: '6px',
+                            border: '1px solid #e5e7eb',
+                            backgroundColor: '#fafafa',
+                            textDecoration: 'none',
+                            transition: 'all 0.15s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.borderColor = '#0070f3';
+                            e.currentTarget.style.backgroundColor = '#fff';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.borderColor = '#e5e7eb';
+                            e.currentTarget.style.backgroundColor = '#fafafa';
+                          }}
+                        >
+                          <div style={{ fontWeight: 'bold', color: '#dc2626', fontSize: '13px', marginBottom: '3px' }}>
+                            Code: {item.code.toUpperCase()}
+                          </div>
+                          <div style={{ fontSize: '13px', color: '#4b5563', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {item.title}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
+            ))
+          )}
+        </main>
+
+      </div>
+    </div>
   );
 }
