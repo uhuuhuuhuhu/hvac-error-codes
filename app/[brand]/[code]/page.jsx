@@ -1,6 +1,5 @@
 import data from '../../../data.json';
 
-// 구글 검색엔진에 1만개 페이지를 모두 등록시켜주는 핵심 설정
 export async function generateStaticParams() {
   return data.map((item) => ({
     brand: item.brand,
@@ -8,9 +7,12 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ErrorPage({ params }) {
+// 최신 문법(async/await)이 적용된 부분입니다.
+export default async function ErrorPage({ params }) {
+  const resolvedParams = await params;
+  
   const errorInfo = data.find(
-    (item) => item.brand === params.brand && item.code === params.code
+    (item) => item.brand === resolvedParams.brand && item.code === resolvedParams.code
   );
 
   if (!errorInfo) return <h1>Error Code Not Found</h1>;
