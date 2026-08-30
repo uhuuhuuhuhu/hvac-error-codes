@@ -1,4 +1,4 @@
-import data from '../data.json';
+import data from './data.json';
 import Link from 'next/link';
 
 export default function Home() {
