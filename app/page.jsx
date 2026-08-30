@@ -67,7 +67,7 @@ export default function Home() {
       <div style={{ display: 'flex', flex: '1', maxWidth: '1200px', width: '100%', margin: '0 auto', padding: '30px 20px', gap: '30px', boxSizing: 'border-box' }}>
         
         {/* 좌측 사이드바 (블로그 스타일 카테고리) */}
-        <aside style={{ width: '260px', flexShrink: '0', display: window && window.innerWidth <= 768 ? 'none' : 'block' }}>
+        <aside style={{ width: '260px', flexShrink: '0' }}>
           <div style={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e1e4e8', padding: '20px', position: 'sticky', top: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
             <h3 style={{ fontSize: '15px', color: '#333', borderBottom: '2px solid #0070f3', paddingBottom: '8px', marginTop: 0, marginBottom: '15px', textTransform: 'uppercase' }}>
               Categories (A-Z)
@@ -87,8 +87,6 @@ export default function Home() {
                         <a 
                           href={`#brand-${brand}`} 
                           style={{ fontSize: '13px', color: '#4b5563', textDecoration: 'none', display: 'block', padding: '2px 0' }}
-                          onMouseOver={(e) => e.target.style.color = '#0070f3'}
-                          onMouseOut={(e) => e.target.style.color = '#4b5563'}
                         >
                           {brand.toUpperCase()} <span style={{ color: '#9ca3af', fontSize: '11px' }}>({groupedByBrand[brand].length})</span>
                         </a>
@@ -139,15 +137,6 @@ export default function Home() {
                             border: '1px solid #e5e7eb',
                             backgroundColor: '#fafafa',
                             textDecoration: 'none',
-                            transition: 'all 0.15s ease'
-                          }}
-                          onMouseOver={(e) => {
-                            e.currentTarget.style.borderColor = '#0070f3';
-                            e.currentTarget.style.backgroundColor = '#fff';
-                          }}
-                          onMouseOut={(e) => {
-                            e.currentTarget.style.borderColor = '#e5e7eb';
-                            e.currentTarget.style.backgroundColor = '#fafafa';
                           }}
                         >
                           <div style={{ fontWeight: 'bold', color: '#dc2626', fontSize: '13px', marginBottom: '3px' }}>
