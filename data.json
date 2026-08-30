@@ -1,9 +1,6 @@
 [
   { "brand": "daikin", "code": "u4", "title": "Communication Error", "cause": "Malfunction of transmission between indoor and outdoor unit", "solution": "Check transmission wiring and thermistor." },
   { "brand": "carrier", "code": "e1", "title": "Room Temperature Sensor Fault", "cause": "Open or short circuit in room temperature sensor", "solution": "Replace the room temperature sensor." },
-  { "brand": "mitsubishi", "code": "p8", "title": "Pipe Temperature Protection", "cause": "Refrigerant shortage or closed valve", "solution": "Check refrigerant leaks and ensure valves are open." },[
-  { "brand": "daikin", "code": "u4", "title": "Communication Error", "cause": "Malfunction of transmission between indoor and outdoor unit", "solution": "Check transmission wiring and thermistor." },
-  { "brand": "carrier", "code": "e1", "title": "Room Temperature Sensor Fault", "cause": "Open or short circuit in room temperature sensor", "solution": "Replace the room temperature sensor." },
   { "brand": "mitsubishi", "code": "p8", "title": "Pipe Temperature Protection", "cause": "Refrigerant shortage or closed valve", "solution": "Check refrigerant leaks and ensure valves are open." },
   { "brand": "lg", "code": "ch05", "title": "Communication Error", "cause": "Communication error between indoor and outdoor units", "solution": "Check the transmission cable and connections." },
   { "brand": "samsung", "code": "e101", "title": "Indoor/Outdoor Communication Error", "cause": "Time-out error due to disconnected or broken wires", "solution": "Inspect power and communication wiring." },
@@ -11,4 +8,3 @@
   { "brand": "lennox", "code": "e201", "title": "Low Ambient Sensor Fault", "cause": "Sensor reading out of range or damaged wiring", "solution": "Measure sensor resistance and replace if faulty." },
   { "brand": "york", "code": "f1", "title": "Return Air Thermistor Issue", "cause": "Short or open circuit in thermistor", "solution": "Replace the return air thermistor." }
 ]
-
