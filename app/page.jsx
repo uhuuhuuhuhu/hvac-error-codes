@@ -1,4 +1,5 @@
 'use client';
+// HVAC Directory Main Page - Updated
 import { useState } from 'react';
 import data from '../data.json';
 import Link from 'next/link';
@@ -6,7 +7,6 @@ import Link from 'next/link';
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 검색어 필터링
   const filteredData = data.filter(
     (item) =>
       item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -14,7 +14,6 @@ export default function Home() {
       item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 브랜드별로 그룹화
   const groupedData = filteredData.reduce((acc, item) => {
     if (!acc[item.brand]) {
       acc[item.brand] = [];
@@ -29,11 +28,10 @@ export default function Home() {
         <h1 style={{ fontSize: '32px', color: '#1a1a1a', marginBottom: '10px' }}>Global HVAC Error Codes Directory</h1>
         <p style={{ color: '#666', fontSize: '16px' }}>Find troubleshooting steps, causes, and solutions for commercial AC units instantly.</p>
         
-        {/* 실시간 검색창 */}
         <div style={{ marginTop: '25px' }}>
           <input
             type="text"
-            placeholder="Search by Brand, Error Code, or Description (e.g., Daikin, U4, Sensor)..."
+            placeholder="Search by Brand, Error Code, or Description (e.g., Daikin, U4)..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
@@ -50,7 +48,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 브랜드별 분류 리스트 출력 */}
       {Object.keys(groupedData).length === 0 ? (
         <p style={{ textAlign: 'center', color: '#888', marginTop: '40px' }}>No error codes found matching your search.</p>
       ) : (
@@ -72,7 +69,6 @@ export default function Home() {
                     backgroundColor: '#fafafa',
                     textDecoration: 'none',
                     color: '#333',
-                    transition: 'all 0.2s ease'
                   }}
                 >
                   <div style={{ fontWeight: 'bold', color: '#d32f2f', marginBottom: '4px' }}>Code: {item.code.toUpperCase()}</div>
